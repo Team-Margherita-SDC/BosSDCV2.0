@@ -2,7 +2,7 @@
   "name": "systemdesigncapstone",
   "version": "2.0.0",
   "description": "System design capstone for senior phase of Hack Reactor",
-  "main": "index.js",
+  "main": "./Server/index.js",
   "scripts": {
     "test": "npm test",
     "start": "nodemon ./server/"
