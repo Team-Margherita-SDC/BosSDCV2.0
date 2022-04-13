@@ -27,14 +27,69 @@ app.get('/reviews', (req, res) => {
 app.get('/reviews/meta', (req, res) => {
   console.log('these were the search params:', req.query);
   let product_id = req.query.product_id;
-  console.log("product_id format:", product_id);
-  // let rating = req.query.rating;
-  // let recommend = req.query.recommend;
-  // 'product_id': `${product_id}`;
-  MergedReviewsMeta.find({recommend: req.query.recommend}).limit(20)
+  MergedReviewsMeta.find({product_id: req.query.product_id})
   .then(response => {
     console.log('this is the response:', response);
-    res.status(200).send(response);
+    let metaData = {
+      "product": response[0].product_id
+    };
+    let
+      oneStarReviews = 0,
+      twoStarReviews = 0,
+      threeStarReviews = 0,
+      fourStarReviews = 0,
+      fiveStarReviews = 0,
+      yes = 0,
+      no = 0;
+    for (let i = 0; i < response.length; i++) {
+      if (response[i].rating === 1) {
+        oneStarReviews++;
+      } else if (response[i].rating === 2) {
+        twoStarReviews++;
+      } else if (response[i].rating === 3) {
+        threeStarReviews++;
+      } else if (response[i].rating === 4) {
+        fourStarReviews++;
+      } else if (response[i].rating === 5) {
+        fiveStarReviews++;
+      }
+
+      if (response[i].recommend === 'false') {
+        no++;
+      } else if (response[i].recommend === 'true') {
+        yes++;
+      }
+
+      if (response[i].characteristicIdsAndValues.characteristics.quality) {
+        console.log("quality", response[i].characteristicIdsAndValues.characteristics.quality);
+      } else if (response[i].characteristicIdsAndValues.characteristics.size) {
+        console.log("size", response[i].characteristicIdsAndValues.characteristics.size);
+      } else if (response[i].characteristicIdsAndValues.characteristics.width) {
+        console.log("width", response[i].characteristicIdsAndValues.characteristics.width);
+      } else if (response[i].characteristicIdsAndValues.characteristics.fit) {
+        console.log("fit", response[i].characteristicIdsAndValues.characteristics.fit);
+      } else if (response[i].characteristicIdsAndValues.characteristics.comfort) {
+        console.log("comfort", response[i].characteristicIdsAndValues.characteristics.comfort);
+      } else if (response[i].characteristicIdsAndValues.characteristics.length) {
+        console.log("length", response[i].characteristicIdsAndValues.characteristics.length);
+      }
+    }
+
+
+    // console.log(oneStarReviews, twoStarReviews, threeStarReviews, fourStarReviews, fiveStarReviews);
+    metaData.ratings = {
+      1: oneStarReviews,
+      2: twoStarReviews,
+      3: threeStarReviews,
+      4: fourStarReviews,
+      5: fiveStarReviews
+    }
+    metaData.recommend = {
+      "true": yes,
+      "false": no
+    }
+    console.log(metaData);
+    res.status(200).send(metaData);
   })
   .catch(err => {
     console.log(err);
