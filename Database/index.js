@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { MergedReview } = require('./Schema/MergedReview.js');
-const { ReviewsMeta } = require('./Schema/MergedReviewsMetaTemp.js');
+const { ReviewsMeta } = require('./Schema/MergedReviewsMeta.js');
 
 const mongoURI = 'mongodb://localhost:27017/ratingsandreviews';
 

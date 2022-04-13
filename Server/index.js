@@ -6,7 +6,7 @@ const path = require("path");
 const port = process.env.PORT || 3000;
 const db = require('../Database/index.js');
 const MergedReview = require('../Database/Schema/MergedReview.js');
-const MergedReviewsMeta = require('../Database/Schema/MergedReviewsMetaTemp.js');
+const MergedReviewsMeta = require('../Database/Schema/MergedReviewsMeta.js');
 
 app.use(express.json());
 // Add in folder for static file serving once API is optimized, plus filepaths for HTML file and distribution directory?  This seems like something to discuss with the team.
@@ -25,7 +25,13 @@ app.get('/reviews', (req, res) => {
 
 // Need to get this data into the proper form.  Use Postman to send the correct structure and then save it according to a schema that uses this structure.  Especially the 'id' parameter, which should be 'review_id'
 app.get('/reviews/meta', (req, res) => {
-  MergedReviewsMeta.find({}).limit(5)
+  console.log('these were the search params:', req.query);
+  let product_id = req.query.product_id;
+  console.log("product_id format:", product_id);
+  // let rating = req.query.rating;
+  // let recommend = req.query.recommend;
+  // 'product_id': `${product_id}`;
+  MergedReviewsMeta.find({recommend: req.query.recommend}).limit(20)
   .then(response => {
     console.log('this is the response:', response);
     res.status(200).send(response);

@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
 const MergedReviewsMetaSchema = new mongoose.Schema({
-  product_id: String,
+  product_id: Number,
   rating: Number,
-  recommended: String,
+  recommend: String,
   characteristicIdsAndValues: {
     characteristics: [
       {
