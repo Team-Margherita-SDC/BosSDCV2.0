@@ -161,7 +161,7 @@ groupProductReviewsByEachReviewID() {
         into: "mergedreviewsmetas",
         on: "_id",
         whenMatched: "replace",
-        whenNotMatched: "insert"
+        whenNotMatched: "discard"
       }
     },
   ],
@@ -184,7 +184,7 @@ getChacracteristicIDAndValueForEachReview() {
       }
     },
     {
-      $out: "characteristics"
+      $out: "finaltest"
     }
   ],
   {
@@ -223,7 +223,7 @@ linkCharacteristicIDAndValueFieldsToReviewInfoForEachReview() {
     },
     {
       $lookup: {
-        from: "characteristics",
+        from: "finaltest",
         localField: "_id",
         foreignField: "_id",
         as: "characteristicIdsAndValues"
@@ -251,7 +251,7 @@ addProductCharacteristicToReview() {
   db.mergedreviewsmetas.aggregate([
     {
       $lookup: {
-        from: "z_mock_characteristics",
+        from: "characteristics",
         localField: "product_id",
         foreignField: "product_id",
         as: "name"

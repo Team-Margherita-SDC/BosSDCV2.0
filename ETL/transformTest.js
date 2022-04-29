@@ -161,7 +161,7 @@ groupProductReviewsByEachReviewID() {
         into: "mergedreviewsmetatest",
         on: "_id",
         whenMatched: "replace",
-        whenNotMatched: "insert"
+        whenNotMatched: "discard"
       }
     },
   ])
@@ -253,49 +253,3 @@ addProductCharacteristicToReview() {
     }
   ])
 }
-
-// KEEP THESE FIELDS FOR LATER AFTER SCHOOL IN ORDER TO GET THE DATA IN THE RIGHT FORM, DO NOT EXECUTE UNTIL THEN.
-
-addBreakdownFields() {
-  db.mergedreviewsmetatest3.aggregate([
-    {
-      $addFields: {
-        "recommended": [],
-        "ratings": []
-      }
-    },
-    {
-      $out: "mergedreviewsmetatest4"
-    }
-  ])
-}
-
-fillOutBreakdownFields() {
-  db.mergedreviewsmetatest4.updateMany(
-    {},
-    {
-      $push: {
-        "recommended": {
-          "false": 0,
-          "true": 0,
-        },
-        "ratings": {
-          "1": 0,
-          "2": 0,
-          "3": 0,
-          "4": 0,
-          "5": 0
-        }
-      }
-    }
-  )
-}
-
-// STILL NEED TO...
-
-// 1. Group the characteristic.id and characteristic.value properties to come in underneath the characteristic.name property properly. -> Start up server in front end and do a Postman request for a low product number to get mock data on this relationship that you can draw from your four CSV files. - MONGDB
-
-// 2. Count the number of true recommendations for each product.  True = 1, False = 1. - MONGODB
-
-
-// 3. Count the number of ratings at each start count for each product. - SERVER ENDPOINT

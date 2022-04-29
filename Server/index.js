@@ -25,11 +25,20 @@ app.get('/reviews', (req, res) => {
 
 // Need to get this data into the proper form.  Use Postman to send the correct structure and then save it according to a schema that uses this structure.  Especially the 'id' parameter, which should be 'review_id'
 app.get('/reviews/meta', (req, res) => {
-  console.log('these were the search params:', req.query);
+  // console.log('these were the search params:', req.query);
   let product_id = req.query.product_id;
+  // MergedReviewsMeta.find({}).limit(15)
+  // .then(response => {
+  //   console.log(response);
+  //   res.status(200).send(response);
+  // })
   MergedReviewsMeta.find({product_id: req.query.product_id})
   .then(response => {
-    console.log('this is the response:', response);
+    // console.log('this is the response:', response);
+    // for (i = 0; i < response.length; i++) {
+    //   console.log('these are the characteristics:', i, response[i].characteristicIdsAndValues.characteristics);
+    //   console.log('these are the characteristic names:', i, response[i].name);
+    // }
     let metaData = {
       "product": response[0].product_id
     };
@@ -60,19 +69,6 @@ app.get('/reviews/meta', (req, res) => {
         yes++;
       }
 
-      if (response[i].characteristicIdsAndValues.characteristics.quality) {
-        console.log("quality", response[i].characteristicIdsAndValues.characteristics.quality);
-      } else if (response[i].characteristicIdsAndValues.characteristics.size) {
-        console.log("size", response[i].characteristicIdsAndValues.characteristics.size);
-      } else if (response[i].characteristicIdsAndValues.characteristics.width) {
-        console.log("width", response[i].characteristicIdsAndValues.characteristics.width);
-      } else if (response[i].characteristicIdsAndValues.characteristics.fit) {
-        console.log("fit", response[i].characteristicIdsAndValues.characteristics.fit);
-      } else if (response[i].characteristicIdsAndValues.characteristics.comfort) {
-        console.log("comfort", response[i].characteristicIdsAndValues.characteristics.comfort);
-      } else if (response[i].characteristicIdsAndValues.characteristics.length) {
-        console.log("length", response[i].characteristicIdsAndValues.characteristics.length);
-      }
     }
 
 
@@ -88,11 +84,11 @@ app.get('/reviews/meta', (req, res) => {
       "true": yes,
       "false": no
     }
-    console.log(metaData);
+    // console.log(metaData);
     res.status(200).send(metaData);
   })
   .catch(err => {
-    console.log(err);
+    // console.log(err);
     res.status(500).end;
   })
 })
