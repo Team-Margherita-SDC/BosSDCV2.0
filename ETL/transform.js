@@ -1,32 +1,6 @@
-let {
-  db,
-  dbName,
-  characteristics,
-  characteristics_reviews,
-  reviews,
-  reviews_photos,
-  z_mock_characteristics,
-  z_mock_characteristic_reviews,
-  z_mock_reviews,
-  z_mock_reviews_photos
-} = require('../index.js');
-
-console.log(
-  'db', db,
-  'dbName', dbName,
-  'characteristics:', characteristics,
-  'characteristics_reviews:', characteristics_reviews,
-  'reviews:', reviews,
-  'reviews_photos:', reviews_photos,
-  'z_mock_characteristics:', z_mock_characteristics,
-  'z_mock_characteristic_reviews:', z_mock_characteristic_reviews,
-  'z_mock_reviews', z_mock_reviews,
-  'z_mock_reviews_photos', z_mock_reviews_photos
-  );
-
 // EXECUTE THESE TRANSFORMATIONS IN SEQUENCE IN THE COMMAND LINE TO CREATE THE "GET reviews" ENDPOINT.
 
-addPhotoFieldWithSubfieldsAndData() {
+// addPhotoFieldWithSubfieldsAndData
   db.reviews.aggregate([
     {
       $lookup: {
@@ -45,16 +19,14 @@ addPhotoFieldWithSubfieldsAndData() {
       $out:  "mergedreviews"
     }
   ])
-}
 
-renameProductIDToProduct() {
+// renameProductIDToProduct
   db.mergedreviews.updateMany(
     {},
     { $rename: {"product_id": "product"} }
   )
-}
 
-addResultsField() {
+// addResultsField
   db.mergedreviews.aggregate([
     {
       $addFields: {
@@ -65,9 +37,8 @@ addResultsField() {
       $out: "mergedreviews"
     }
   ])
-}
 
-addFieldsToResultsField() {
+// addFieldsToResultsField
   db.mergedreviews.updateMany(
     {},
     {
@@ -87,17 +58,15 @@ addFieldsToResultsField() {
       }
     }
   )
-}
 
-outputToNewTable() {
+// outputToNewTable
   db.mergedreviews.aggregate([
     {
       $out: "mergedreviews"
     }
   ])
-}
 
-updateReviewID() {
+// updateReviewID
   db.mergedreviews.aggregate([
     {
       $set: {
@@ -135,11 +104,10 @@ updateReviewID() {
       $out: "mergedreviews"
     }
   ])
-}
 
 // EXECUTE THESE TRANSFORMATIONS IN SEQUENCE IN THE COMMAND LINE TO CREATE THE "GET reviews/meta" ENDPOINT.
 
-groupProductReviewsByEachReviewID() {
+// groupProductReviewsByEachReviewID
   db.reviews.aggregate([
     {
       $group: {
@@ -168,9 +136,8 @@ groupProductReviewsByEachReviewID() {
   {
     allowDiskUse: true
   })
-}
 
-getChacracteristicIDAndValueForEachReview() {
+// getChacracteristicIDAndValueForEachReview
   db.characteristic_reviews.aggregate([
     {
       $group: {
@@ -190,9 +157,8 @@ getChacracteristicIDAndValueForEachReview() {
   {
     allowDiskUse: true
   })
-}
 
-linkCharacteristicIDAndValueFieldsToReviewInfoForEachReview() {
+// linkCharacteristicIDAndValueFieldsToReviewInfoForEachReview
   db.mergedreviewsmetas.aggregate([
     {
       $addFields: {
@@ -245,9 +211,8 @@ linkCharacteristicIDAndValueFieldsToReviewInfoForEachReview() {
   {
     allowDiskUse: true
   })
-}
 
-addProductCharacteristicToReview() {
+// addProductCharacteristicToReview
   db.mergedreviewsmetas.aggregate([
     {
       $lookup: {
@@ -264,9 +229,8 @@ addProductCharacteristicToReview() {
   {
     allowDiskUse: true
   })
-}
 
-removeUnnecessaryFields() {
+// removeUnnecessaryFields
   db.mergedreviewsmetas.aggregate([
     {
       $addFields: {
@@ -295,4 +259,3 @@ removeUnnecessaryFields() {
   {
     allowDiskUse: true
   })
-}
