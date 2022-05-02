@@ -265,3 +265,34 @@ addProductCharacteristicToReview() {
     allowDiskUse: true
   })
 }
+
+removeUnnecessaryFields() {
+  db.mergedreviewsmetas.aggregate([
+    {
+      $addFields: {
+        chars: "$characteristicIdsAndValues.characteristics"
+      }
+    },
+    {
+      $sort: {"name.id": 1}
+    },
+    { $set:
+      { "chars":
+        { $function: {
+            body: function(chars) { return chars.sort((a, b) => a.characteristic_id > b.characteristic_id); },
+            args: ["$chars"],
+            lang: "js"
+        }}
+      }
+    },
+    {
+      $unset: ["characteristics", "characteristicIdsAndValues", "name._id", "name.product_id"]
+    },
+    {
+      $out: "mergedreviewsmetas"
+    }
+  ],
+  {
+    allowDiskUse: true
+  })
+}

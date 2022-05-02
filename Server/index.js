@@ -25,20 +25,9 @@ app.get('/reviews', (req, res) => {
 
 // Need to get this data into the proper form.  Use Postman to send the correct structure and then save it according to a schema that uses this structure.  Especially the 'id' parameter, which should be 'review_id'
 app.get('/reviews/meta', (req, res) => {
-  // console.log('these were the search params:', req.query);
   let product_id = req.query.product_id;
-  // MergedReviewsMeta.find({}).limit(15)
-  // .then(response => {
-  //   console.log(response);
-  //   res.status(200).send(response);
-  // })
   MergedReviewsMeta.find({product_id: req.query.product_id})
   .then(response => {
-    // console.log('this is the response:', response);
-    // for (i = 0; i < response.length; i++) {
-    //   console.log('these are the characteristics:', i, response[i].characteristicIdsAndValues.characteristics);
-    //   console.log('these are the characteristic names:', i, response[i].name);
-    // }
     let metaData = {
       "product": response[0].product_id
     };
@@ -51,6 +40,9 @@ app.get('/reviews/meta', (req, res) => {
       yes = 0,
       no = 0;
     for (let i = 0; i < response.length; i++) {
+      // console.log("response", i, response[i]);
+      // console.log("characteristics:", i, response[i].chars);
+      // console.log("names:", i, response[i].name);
       if (response[i].rating === 1) {
         oneStarReviews++;
       } else if (response[i].rating === 2) {
@@ -62,17 +54,17 @@ app.get('/reviews/meta', (req, res) => {
       } else if (response[i].rating === 5) {
         fiveStarReviews++;
       }
-
       if (response[i].recommend === 'false') {
         no++;
       } else if (response[i].recommend === 'true') {
         yes++;
       }
-
+      console.log("before:", response[i]);
+      for (let j = 0; j < response[i].name.length; j++) {
+        response[i].name[j].value = response[i].chars[j].value;
+      }
+      console.log("after:", response[i]);
     }
-
-
-    // console.log(oneStarReviews, twoStarReviews, threeStarReviews, fourStarReviews, fiveStarReviews);
     metaData.ratings = {
       1: oneStarReviews,
       2: twoStarReviews,
@@ -84,11 +76,9 @@ app.get('/reviews/meta', (req, res) => {
       "true": yes,
       "false": no
     }
-    // console.log(metaData);
     res.status(200).send(metaData);
   })
   .catch(err => {
-    // console.log(err);
     res.status(500).end;
   })
 })
