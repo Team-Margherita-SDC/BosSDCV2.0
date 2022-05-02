@@ -79,3 +79,11 @@
 // PUT /reviews/:review_id/report...
 
 "reported": true
+
+// TERMINAL COMMANDS FOR MONGODUMP, MONGORESTORE, AND AWS DEPLOYMENT
+
+// '/reviews' endpoint data
+mongodump --uri="mongodb://127.0.0.1:27017" --db=ratingsandreviews --collection=mergedreviews -o /Users/robertczajka/Documents/Hack\ Reactor/Programming\ Files/Better\ System\ Design\ Capstone/BosSDCV2.0/AmazonDeployment
+
+// '/reviews/metas' endpoint data
+mongodump --uri="mongodb://127.0.0.1:27017" --db=ratingsandreviews --collection=mergedreviewsmetas -o /Users/robertczajka/Documents/Hack\ Reactor/Programming\ Files/Better\ System\ Design\ Capstone/BosSDCV2.0/AmazonDeployment
