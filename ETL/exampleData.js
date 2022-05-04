@@ -82,8 +82,15 @@
 
 // TERMINAL COMMANDS FOR MONGODUMP, MONGORESTORE, AND AWS DEPLOYMENT
 
-// '/reviews' endpoint data
+// '/reviews' endpoint data, mongodump
 mongodump --uri="mongodb://127.0.0.1:27017" --db=ratingsandreviews --collection=mergedreviews -o /Users/robertczajka/Documents/Hack\ Reactor/Programming\ Files/Better\ System\ Design\ Capstone/BosSDCV2.0/AmazonDeployment
 
-// '/reviews/metas' endpoint data
+// '/reviews' endpoint data, mongorestore
+mongorestore --verbose --uri="mongodb://127.0.0.1:27017" /Users/robertczajka/Documents/Hack\ Reactor/Programming\ Files/Better\ System\ Design\ Capstone/BosSDCV2.0/AmazonDeployment/ratingsandreviews
+
+// '/reviews/metas' endpoint data, mongodump
 mongodump --uri="mongodb://127.0.0.1:27017" --db=ratingsandreviews --collection=mergedreviewsmetas -o /Users/robertczajka/Documents/Hack\ Reactor/Programming\ Files/Better\ System\ Design\ Capstone/BosSDCV2.0/AmazonDeployment
+
+// SCP for database dump transfer from local machine to AWS instance
+scp -i SystemDesignCapstone.pem ./ratingsandreviews/mergedreviews.bson ubuntu@ec2-3-82-103-134.compute-1.amazonaws.com:
+scp -i SystemDesignCapstone.pem ./ratingsandreviews/mergedreviewsmetas.bson ubuntu@ec2-3-82-103-134.compute-1.amazonaws.com:~/
