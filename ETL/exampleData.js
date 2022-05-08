@@ -99,5 +99,3 @@ scp -i SystemDesignCapstone.pem ./ratingsandreviews/mergedreviews.bson ubuntu@ec
 
 // SCP for database dump transfer from local machine to AWS instance - "mergedreviewsmetas" collection
 scp -i SystemDesignCapstone.pem ./ratingsandreviews/mergedreviewsmetas.bson ubuntu@ec2-3-82-103-134.compute-1.amazonaws.com:~/
-
-// TERMINAL COMMANDS FOR AWS DEPLOYMENT OF SERVER
